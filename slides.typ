@@ -80,6 +80,10 @@
   - RCE and data-only exploits
 ]
 
+#slideh[][
+  Not about exploitation or a specific vulnerability/CVE, but the methodology.
+]
+
 #slideh[== APK Analysis][
   What's interesting for me?
 
@@ -129,6 +133,105 @@
   ]
 ]
 
+#slideh[== Static Analysis][
+  - Manifest file --- #sym.checkmark
+  - Resources --- #sym.times
+]
+
 #slideh[][
-  #lorem(20)
+  #set align(center)
+  #table(columns: (40%, 20%, 40%), stroke: none,
+    [
+      - Java
+      - C++
+    ],
+    text(size: 3em, sym.arrow.r.double),
+    [Android Studio]
+  )
+]
+
+#slideh[== Shared/Native libraries][
+  Ordered by the "low-hanging fruit" principle:
+
+  + Legacy code
+  + Self-written components
+  + ...
+  5. Crypto implementation
+  + ...
+  9. Popular open-source frameworks
+  + RFC, protocols and manifests
+]
+
+#slideh[== Plan][
+  + Translate the code architecture into a convenient format (mind map, graph, wiki, Zettelkasten, etc.) #pause
+  + Identify the entry points #pause
+  + Building attack vectors #pause
+  + Isolating target components #pause
+  + Analysis (fuzzing in our case)
+]
+
+#slideh[== Attack Vectors & Components][
+  - File parsers and decoders
+    - FLAC
+    - GIF
+    - Opus
+    - Lottie (modified)
+]
+
+#slideh[][
+  - Connection
+    - `tgnet`
+    - `TLObject` --- (de)serialization (legacy)
+  - VoIP
+    - `tgcalls` (legacy)
+    - WebRTC (modified)
+  - etc.
+]
+
+#centered-slide[== Fuzzing]
+
+#slideh[=== Harness][
+  #table(columns: (30%, 10%, 20%, 40%), stroke: none,
+    [Do you have the source code? #pause], [YES #pause],
+    [#text(size: 3em, sym.arrow.r.double)],
+    [easy peasy lemon squeezy]
+    )
+]
+
+#centered-slide[NO]
+
+#slideh[][
+  - Isolation is not always possible in complex components #pause
+  - Behavior emulation (sockets, files, server, protocol, Java code, etc.) #pause
+  - Legacy code is a legacy code #pause
+  - Build for Android or for a host x86_64 POSIX machine?
+]
+
+#slideh[==== Example. `tgnet`][
+  + Replace Android code #pause
+  + #strike[Modify]Write CMake file #pause
+  + Develop server (MTProto) and emulate Java code & socket file #pause
+  + Develop a MitM PoC attack for triaging
+]
+
+#slideh[=== Fuzzers][
+  - AFL/AFL++
+  - libFuzzer / centipede / fuzztest
+  - honggfuzz
+  - libAFL
+  - etc.
+]
+
+#slideh[== Catches][
+  - DoS
+  - Leaks
+  - Cryptography weaknesses
+  - Vulnerabilities in open source components
+]
+
+#slideh[== Summary][
+  + Not so interesting for the presentation, but important as a base
+  + Bad BugBounty program
+  + Good for a first research in this field
+  + Many other methods of analysis can be applied
 ]
