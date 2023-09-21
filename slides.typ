@@ -99,7 +99,7 @@
   - RCE and data-only exploits
 ]
 
-#slideh[][
+#focus-slide[
   Not about exploitation or a specific vulnerability/CVE, but the methodology.
 ]
 
@@ -141,7 +141,7 @@
 
 #centered-slide[= Telegram
   #v(2em)
-  #image(height: 50%, "./images/Telegram-Logo.png")
+  #image(height: 50%, "./images/Telegram_2019_Logo.svg")
 ]
 
 #slideh[== Why first?][
@@ -257,7 +257,7 @@
 
 #centered-slide[= Viber
   #v(2em)
-  #image(height: 50%, "./images/purple-icon_brand-center.png")
+  #image(width: 80%, "./images/Rakuten_Viber_logo_2020.svg")
 ]
 
 #slideh[== Sources][
@@ -537,4 +537,33 @@
 #slideh[== Sources (another time)][
   - #link("https://xakep.ru/2023/05/16/analyzing-viber/")[Препарируем Viber. Мини-гид по анализу приложений для Android] \@ Xakep
   - #link("https://github.com/saruman9/viber_linkparser_fuzzer/")[fuzzer + harness] \@ GitHub
+]
+
+#centered-slide[= WhatsApp
+  #v(2em)
+  #image(height: 50%, "./images/WhatsApp_logo-color-vertical.svg")
+]
+
+#focus-slide[
+  == Disclaimer
+
+  The research is in progress.
+]
+
+#slideh[== Static Analysis][
+  - Manifest file --- #sym.checkmark
+  - Resources --- #sym.checkmark, see the next slide
+  - 1-day analysis + binary diffing --- #sym.checkmark
+]
+
+#centered-slide[== Shared/Native Libraries]
+
+#slideh[=== Superpack][
+  Android app compression, which combines compiler analysis with data compression. See #link("https://engineering.fb.com/2021/09/13/core-data/superpack/")[Superpack: Pushing the limits of compression in Facebook’s mobile apps] by Sapan Bhatia from Facebook.
+]
+
+#slideh[==== Resolving][
+  + Reverse engineering and developing
+  + Reverse engineering and developing a wrapper (calling functions from a shared library in an emulator)
+  + Decompression in an emulator/Docker
 ]
