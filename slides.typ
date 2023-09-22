@@ -538,9 +538,20 @@
   ```
 ]
 
-#slideh[== Sources (another time)][
+#slideh[== Catches][
+  - DoS
+  - Leaks
+]
+
+#slideh[== Sources (once again)][
   - #link("https://xakep.ru/2023/05/16/analyzing-viber/")[Препарируем Viber. Мини-гид по анализу приложений для Android] \@ Xakep
   - #link("https://github.com/saruman9/viber_linkparser_fuzzer/")[fuzzer + harness] \@ GitHub
+]
+
+#slideh[== Summary][
+  - More details in the article #emoji.finger.t
+  - The research has been interrupted, so go ahead!
+  - The basic things for graybox fuzzing were considered, further --- more
 ]
 
 #centered-slide[= WhatsApp
@@ -603,14 +614,14 @@
   + #link("https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1695346506")[Workaround] for aarch64 `__clear_cache` issue
 ]
 
-#slideh[==== LibAFL problems#footnote[#link("https://github.com/saruman9/LibAFL/branches/yours")[Branches of patches/changes] in my repository]][
+#slideh[==== LibAFL problems][
   - DrCov coverage doesn't work as expected
   - Asan doesn't work for Android x86_64
   - miniBSOD doesn't work for Android x86_64
 ]
 
 #slideh[][
-  - Additional changes:
+  - Additional changes#footnote[#link("https://github.com/saruman9/LibAFL/branches/yours")[Branches of patches/changes] in my repository]:
     - Option to continue fuzzing
     - Catching of timeout objectives
     - Option to disable coverage
@@ -624,6 +635,70 @@
   - The sanitizer based on Frida doesn't work correctly on some arch/platforms
 ]
 
-#slideh[=== JavaVM][
+#slideh[=== Java VM][
+  #set align(center)
 
+  #text(2em)[#emoji.lightbulb]
+
+  Harness = Java + Native Libraries
+
+  But how? #pause
+
+  Create JavaVM from C/C++/Rust code of a harness/fuzzer!
 ]
+
+#slideh[==== Sources][
+  - #link("https://calebfenton.github.io/2017/04/05/creating_java_vm_from_android_native_code/")[Creating a Java VM from Android Native Code] by Caleb Fenton
+  - #link("https://calebfenton.github.io/2017/04/14/calling_jni_functions_with_java_object_arguments_from_the_command_line/")[Calling JNI Functions with Java Object Arguments from the Command Line] by Caleb Fenton
+  - #link("https://gershnik.github.io/2021/03/26/load-art-from-native.html")[Loading Android ART virtual machine from native executables] by Eugene Gershnik
+]
+
+#slideh[==== Where hell begins?][
+  #set align(center)
+
+  #only(1)[Creating a Java VM is a non-trivial task!]
+  #only(2)[#text(size: 1.2em)[Compliance with all legacy designs in Android is hard!]
+
+    _I did a separate research on the ASOP source code_
+  ]
+
+  #only(3)[#text(size: 1.4em)[Running Java VM under a fuzzer and Frida is a pain!]
+
+    _I spent many hours debugging_
+  ]
+
+  #only(4)[#text(size: 1.6em)[A real device and an emulator are two different things!]
+
+    _I have used 3 real devices and countless versions of an emulator_
+  ]
+
+  #only(5)[#text(size: 2em)[It still doesn't work stable...]
+
+    #align(right)[#text(size: .5em, fill: gray)[Someday I'll publish it as open source]]
+  ]
+]
+
+#slideh[=== Smali patching][
+  #only(1)[
+    #set align(center)
+
+    Does anyone know a tool that is comfortable to use for Smali patching?
+  ]
+  #only(2)[
+    - #link("https://blog.quarkslab.com/smali-the-parseltongue-language.html")[Smali the Parseltongue Language] by Benoît Forgette from Quarkslab
+    - Ghidra
+    - Binary Ninja
+    - #link("https://github.com/LoyieKing/Smalise")[Smalise extension for VSCode] by LoyieKing
+  ]
+]
+
+#slideh[== Catches][
+  #align(center + top)[#text(3em)[...]]
+]
+
+#slideh[= Summary][
+  -
+  - This is the beginning for now, next time --- exploitation
+]
+
+#focus-slide[= Thank you!]
