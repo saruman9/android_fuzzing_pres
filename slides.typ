@@ -1,5 +1,6 @@
 #import "@preview/polylux:0.3.1": *
 #import themes.simple: *
+#import "typst-svg-emoji/lib.typ": setup-emoji, noto
 
 #set text(font: ("Verdana"))
 #let matrix_color = rgb("#008F11")
@@ -25,6 +26,7 @@
 }
 #show figure.caption: emph
 #set figure(numbering: none)
+#show: setup-emoji.with(font: noto)
 
 #let slideh(title, body) = {
   let deco-format(it) = text(size: .6em, fill: gray, it)
@@ -101,6 +103,8 @@
 
 #focus-slide[
   Not about exploitation or a specific vulnerability/CVE, but the methodology.
+
+  #text(size: .5em, fill: gray, [Without meme, sry #emoji.face.tear])
 ]
 
 #slideh[== APK Analysis][
@@ -146,15 +150,15 @@
 
 #slideh[== Why first?][
   #line-by-line[
-    - Source Code --- #sym.checkmark
-    - BugBounty --- #sym.checkmark
-    - I'm a user of the app --- #sym.checkmark
+    - Source Code --- #emoji.checkmark.box
+    - BugBounty --- #emoji.checkmark.box
+    - I'm a user of the app --- #emoji.checkmark.box
   ]
 ]
 
 #slideh[== Static Analysis][
-  - Manifest file --- #sym.checkmark
-  - Resources --- #sym.times
+  - Manifest file --- #emoji.checkmark.box
+  - Resources --- #emoji.crossmark
 ]
 
 #slideh[][
@@ -266,9 +270,9 @@
 ]
 
 #slideh[== Static Analysis][
-  - Manifest file --- #sym.checkmark
-  - Resources --- #sym.times
-  - 1-day analysis + binary diffing --- #sym.checkmark
+  - Manifest file --- #emoji.checkmark.box
+  - Resources --- #emoji.crossmark
+  - 1-day analysis + binary diffing --- #emoji.checkmark.box
 ]
 
 #centered-slide[== Shared/Native Libraries]
@@ -378,14 +382,14 @@
     stroke: gray,
     inset: .3em,
     [*Fuzzer*], [*Instru\-mentation*], [*Emulator (x86_64)*], [*Real device, aarch64*],
-    [AFL++ #footnote[#link("https://blog.quarkslab.com/android-greybox-fuzzing-with-afl-frida-mode.html")[Android greybox fuzzing with AFL++ Frida mode] by Eric Le Guevel from Quarkslab]], [Frida], [#sym.checkmark AFL++ in], [#sym.checkmark],
-    [AFL++ #footnote[#link("https://alephsecurity.com/2021/11/16/fuzzing-qemu-android/")[AFL++ on Android with QEMU support] by Itai Greenhut (\@Gr33nh4t) from Aleph Research; #link("https://github.com/marcinguy/fpicker-aflpp-android")[fpicker-aflpp-android] by marcinguy]], [Qemu], [#sym.times], [#sym.checkmark],
-    [AFL++ #footnote[#link("https://googleprojectzero.blogspot.com/2020/07/mms-exploit-part-2-effective-fuzzing-qmage.html")[MMS Exploit Part 2: Effective Fuzzing of the Qmage Codec] by Mateusz Jurczyk from Project Zero; #link("https://github.com/ant4g0nist/Sloth")[Sloth] by ant4g0nist]], [Qemu], [#sym.checkmark], [#sym.times],
-    [AFL++], [Unicorn + qiling], [Unicorn], [#sym.times #sym.checkmark?],
-    [honggfuzz/AFL++], [QBDI], [QBDI], [#sym.times #sym.checkmark?],
-    [LibAFL], [Qemu], [#sym.times], [#sym.checkmark],
-    [LibAFL], [Qemu], [#sym.checkmark], [#sym.times],
-    [LibAFL], [Frida], [#sym.checkmark LibAFL in], [#sym.checkmark],
+    [AFL++ #footnote[#link("https://blog.quarkslab.com/android-greybox-fuzzing-with-afl-frida-mode.html")[Android greybox fuzzing with AFL++ Frida mode] by Eric Le Guevel from Quarkslab]], [Frida], [#emoji.checkmark.box AFL++ in], [#emoji.checkmark.box],
+    [AFL++ #footnote[#link("https://alephsecurity.com/2021/11/16/fuzzing-qemu-android/")[AFL++ on Android with QEMU support] by Itai Greenhut (\@Gr33nh4t) from Aleph Research; #link("https://github.com/marcinguy/fpicker-aflpp-android")[fpicker-aflpp-android] by marcinguy]], [Qemu], [#emoji.crossmark], [#emoji.checkmark.box],
+    [AFL++ #footnote[#link("https://googleprojectzero.blogspot.com/2020/07/mms-exploit-part-2-effective-fuzzing-qmage.html")[MMS Exploit Part 2: Effective Fuzzing of the Qmage Codec] by Mateusz Jurczyk from Project Zero; #link("https://github.com/ant4g0nist/Sloth")[Sloth] by ant4g0nist]], [Qemu], [#emoji.checkmark.box], [#emoji.crossmark],
+    [AFL++], [Unicorn + qiling], [Unicorn], [#emoji.crossmark/#emoji.checkmark.box?],
+    [honggfuzz/AFL++], [QBDI], [QBDI], [#emoji.crossmark/#emoji.checkmark.box?],
+    [LibAFL], [Qemu], [#emoji.crossmark], [#emoji.checkmark.box],
+    [LibAFL], [Qemu], [#emoji.checkmark.box], [#emoji.crossmark],
+    [LibAFL], [Frida], [#emoji.checkmark.box LibAFL in], [#emoji.checkmark.box],
   )
 ]
 
@@ -529,7 +533,7 @@
           functions->parse_link = parse_link;
           functions->copy_jni_string_from_str = copy_jni_string_from_str;
           return functions;
-	    }
+        }
   [...]
   ```
 ]
@@ -547,23 +551,79 @@
 #focus-slide[
   == Disclaimer
 
-  The research is in progress.
+  The research is in progress
 ]
 
 #slideh[== Static Analysis][
-  - Manifest file --- #sym.checkmark
-  - Resources --- #sym.checkmark, see the next slide
-  - 1-day analysis + binary diffing --- #sym.checkmark
+  - Manifest file --- #emoji.checkmark.box
+  - Resources --- #emoji.checkmark.box, see the next slide
+  - 1-day analysis + binary diffing --- #emoji.checkmark.box
 ]
 
 #centered-slide[== Shared/Native Libraries]
 
 #slideh[=== Superpack][
-  Android app compression, which combines compiler analysis with data compression. See #link("https://engineering.fb.com/2021/09/13/core-data/superpack/")[Superpack: Pushing the limits of compression in Facebook’s mobile apps] by Sapan Bhatia from Facebook.
+  Android app compression, which combines compiler analysis with data compression.
+
+  See #link("https://engineering.fb.com/2021/09/13/core-data/superpack/")[Superpack: Pushing the limits of compression in Facebook’s mobile apps] by Sapan Bhatia from Facebook.
 ]
 
 #slideh[==== Resolving][
   + Reverse engineering and developing
   + Reverse engineering and developing a wrapper (calling functions from a shared library in an emulator)
   + Decompression in an emulator/Docker
+]
+
+#centered-slide[== Fuzzing]
+
+#slideh[=== AFL++ + Frida][
+  - Not as hard to build for Android as I expected #footnote[#link("https://github.com/saruman9/AFLplusplus/tree/android")[Repository] for building AFL++ under Android]
+  - Perfect for those who prefer C++
+  - Not as flexible (_sic!_) as LibAFL, but rich in functionality
+]
+
+#centered-slide[=== LibAFL + Frida]
+
+#slideh[==== Android NDK + Frida + Rust = Building is the real pain!][
+  Works: Rust 1.67, NDK 22, clang30
+
+  Doesn't work:
+
+  - Rust 1.67, NDK 25, clang\*
+  - Rust 1.70, NDK 21, clang\*
+  - Rust 1.70, NDK 22, clang\*
+  - Rust 1.70, NDK 25, clang\*
+]
+
+#slideh[][
+  + Moving Android toolchains from libgcc to libclang_rt (#link("https://github.com/android/ndk/wiki/Changelog-r23#changes")[Issue 1231])
+  + Updating the Android NDK in Rust 1.68 (#link("https://blog.rust-lang.org/2023/01/09/android-ndk-update-r25.html")[Changelog])
+  + Fixing build error for NDK 23 and above (#link("https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946")[workaround])
+  + #link("https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1693328137")[Patches] for Frida (only for NDK below 23)
+  + #link("https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1695346506")[Workaround] for aarch64 `__clear_cache` issue
+]
+
+#slideh[==== LibAFL problems#footnote[#link("https://github.com/saruman9/LibAFL/branches/yours")[Branches of patches/changes] in my repository]][
+  - DrCov coverage doesn't work as expected
+  - Asan doesn't work for Android x86_64
+  - miniBSOD doesn't work for Android x86_64
+]
+
+#slideh[][
+  - Additional changes:
+    - Option to continue fuzzing
+    - Catching of timeout objectives
+    - Option to disable coverage
+    - The option of minimizing a corpus
+]
+
+#slideh[=== Frida][
+  - I had a lot of problems because I didn't understand how Stalker works. Especially when analyzing complex objects (JIT is terrible)
+  - Be sure to read #link("https://frida.re/docs/stalker/")[the documentation] for Stalker (and Gum interface) before using it #pause
+  - LibAFL + Frida = Multithreading doesn't work #pause
+  - The sanitizer based on Frida doesn't work correctly on some arch/platforms
+]
+
+#slideh[=== JavaVM][
+
 ]

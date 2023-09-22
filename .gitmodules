@@ -1,0 +1,3 @@
+[submodule "typst-svg-emoji"]
+	path = typst-svg-emoji
+	url = https://github.com/polazarus/typst-svg-emoji
