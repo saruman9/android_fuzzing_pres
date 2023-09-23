@@ -367,7 +367,7 @@
 
 #centered-slide[== Fuzzing]
 
-#slideh[=== Blackbox is more interesting][
+#slideh[=== Greybox is more interesting][
   - #only(1)[libFuzzer] #only("2-")[#strike[libFuzzer]]
   #only(3)[- honggfuzz] #only("4-")[- #strike[honggfuzz]]
   #only("5-")[- AFL++]
@@ -644,7 +644,7 @@
 
   But how? #pause
 
-  Create JavaVM from C/C++/Rust code of a harness/fuzzer!
+  Create Java VM from C/C++/Rust code of a harness/fuzzer!
 ]
 
 #slideh[==== Sources][
@@ -697,7 +697,8 @@
 ]
 
 #slideh[= Summary][
-  -
+  - The journey is 6 months long #pause
+  - From zero to #strike([hero]) some bugs #pause
   - This is the beginning for now, next time --- exploitation
 ]
 
