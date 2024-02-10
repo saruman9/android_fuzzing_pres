@@ -1,0 +1,22 @@
+{
+	"Print notes": {
+		"scope": "typst",
+		"prefix": "note",
+		"body": [
+			"#pdfpc.speaker-note(",
+			"  ```md",
+			"  $1",
+			"  ```",
+			")",
+		]
+	},
+	"Slide horizon": {
+		"scope": "typst",
+		"prefix": "sh",
+		"body": [
+			"#slideh[$1][",
+			"  $2",
+			"]",
+		]
+	}
+}

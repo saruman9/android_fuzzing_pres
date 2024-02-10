@@ -1,0 +1,10 @@
+{
+    "[typst]": {
+        "editor.wordWrap": "on",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.autoClosingBrackets": "never",
+    },
+    "cSpell.words": [
+        "pdfpc"
+    ]
+}
