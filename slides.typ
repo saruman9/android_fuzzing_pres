@@ -1,6 +1,5 @@
 #import "@preview/polylux:0.3.1": *
 #import themes.simple: *
-#import "typst-svg-emoji/lib.typ": setup-emoji, noto
 
 #set text(font: ("Verdana"))
 #let matrix_color = rgb("#008F11")
@@ -26,7 +25,6 @@
 }
 #show figure.caption: emph
 #set figure(numbering: none)
-#show: setup-emoji.with(font: noto)
 
 #let slideh(title, body) = {
   let deco-format(it) = text(size: .6em, fill: gray, it)
