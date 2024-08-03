@@ -29,9 +29,9 @@
 #let slideh(title, body) = {
   let deco-format(it) = text(size: .6em, fill: gray, it)
   set page(
-    header: locate(loc => {
-      let sections = query(heading.where(level: 1, outlined: true).before(loc), loc)
-      let heads = query(heading.where(outlined: true).before(loc), loc)
+    header: context {
+      let sections = query(heading.where(level: 1, outlined: true).before(here()))
+      let heads = query(heading.where(outlined: true).before(here()))
       if sections == () {
         if title == [] and sections.last().body != heads.last().body {
           deco-format(heads.last().body)
@@ -40,13 +40,12 @@
         if title == [] and sections.last().body != heads.last().body {
           deco-format(heads.last().body)
         }
-        h(1fr)
-        deco-format(sections.last().body)
+        h(1fr); deco-format(sections.last().body)
       }
-    }),
-    footer: deco-format({
-      simple-footer.display(); h(1fr); logic.logical-slide.display()
-    }),
+    },
+    footer: context {
+      deco-format({ simple-footer.get(); h(1fr); logic.logical-slide.display() })
+    },
     footer-descent: 1em,
     header-ascent: 1em,
   )
