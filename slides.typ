@@ -1,30 +1,23 @@
 #import "@preview/polylux:0.3.1": *
 #import themes.simple: *
 
-#set text(font: ("Verdana"))
-#let matrix_color = rgb("#008F11")
+#set text(font: ("Verdana", "Apple Color Emoji"))
 #show link: strong
 #show link: set text(fill: blue)
 #show: simple-theme.with()
+#show raw: set text(font: "JetBrainsMono NF")
 #show raw.where(block: true): it => {
   if it.text.first() == "$" {
-    block(
-      fill: luma(200),
-      inset: 10pt,
-      radius: 4pt,
-      it
-    )
+    block(fill: luma(200), inset: 10pt, radius: 4pt, it)
   } else {
-    block(
-      fill: luma(240),
-      inset: 10pt,
-      radius: 4pt,
-      it
-    )
+    block(fill: luma(240), inset: 10pt, radius: 4pt, it)
   }
 }
 #show figure.caption: emph
 #set figure(numbering: none)
+#show footnote.entry: set text(size: 0.7em)
+#set footnote.entry(gap: 0.3em)
+#show footnote: set text(blue)
 
 #let slideh(title, body) = {
   let deco-format(it) = text(size: .6em, fill: gray, it)
@@ -40,7 +33,9 @@
         if title == [] and sections.last().body != heads.last().body {
           deco-format(heads.last().body)
         }
-        h(1fr); deco-format(sections.last().body)
+        if title == [] or title.at("depth") != 1 {
+          h(1fr); deco-format(sections.last().body)
+        }
       }
     },
     footer: context {
@@ -51,6 +46,7 @@
   )
   set align(horizon)
   let full_body = [
+    #counter(footnote).update(0)
     #align(top, title)
     #align(horizon, body)
   ]
@@ -60,21 +56,23 @@
 #title-slide[
   = Vulnerability Research of Android apps:\ from 0 to 0-day using fuzzing
   #v(2em)
-  #align(center, strong[Defcon Tbilisi | DC995322])
+  #align(center, strong[DEF CON Russia | DCG7812])
   #table(columns: (auto, auto), stroke: none, column-gutter: 10%,
-    [
-      GitHub: #link("https://github.com/saruman9")[saruman9]
-    ], [
-      Telegram: #link("https://t.me/dura_lex")[\@dura_lex]
-    ]
+    [ GitHub: #link("https://github.com/saruman9")[saruman9] ],
+    [ Telegram: #link("https://t.me/dura_lex")[\@dura_lex] ]
   )
-  #align(center + bottom)[September 23, 2023]
+  #align(center + bottom)[August 10, 2024]
 ]
 
 
 #slideh[== About me][
-  - *Vulnerability Researcher*: IoT, ICS, embedded (ATM, CPU, PCH, etc.)
+  - *Vulnerability Researcher*: IoT, ICS, embedded, mobile, etc.
   - *System Developer*: tools for automatic analysis, observability systems, fuzzers, emulators, etc.
+]
+
+#slideh[== Agenda ][
+  #outline(title: none)
+  #text(size: .5em, fill: gray, [The further down the list, the more difficult it is...])
 ]
 
 #slideh[== Background][
@@ -99,7 +97,7 @@
 ]
 
 #focus-slide[
-  Not about exploitation or a specific vulnerability/CVE, but the methodology.
+  Not about exploitation or a specific vulnerability/CVE, but the methodology
 
   #text(size: .5em, fill: gray, [Without meme, sry #emoji.face.tear])
 ]
@@ -107,7 +105,7 @@
 #slideh[== APK Analysis][
   What's interesting for me?
 
-  - Android manifest file
+  Android manifest file:
     - Activities
     - Services
     - Broadcasts Receivers
@@ -116,7 +114,7 @@
 ]
 
 #slideh[][
-  - Resources
+  Resources:
     - Libraries
     - DSL parsers
     - Protocol Buffers files
@@ -124,14 +122,14 @@
 ]
 
 #slideh[][
-  - Java Decompilation
+  Java Decompilation:
     - Deobfuscation
     - Refactoring
     - Analysis (control-flow, data-flow, etc.)
 ]
 
 #slideh[][
-  - Shared/Native Libraries --- my main target
+  Shared/Native Libraries --- my main target
 ]
 
 #slideh[== Is source code exist?][
@@ -211,10 +209,10 @@
 #centered-slide[== Fuzzing]
 
 #slideh[=== Harness][
-  #table(columns: (30%, 10%, 20%, 40%), stroke: none,
-    [Do you have the source code? #pause], [YES #pause],
+  #table(columns: (30%, 15%, 15%, 40%), stroke: none,
+    [Do you have the source code? #pause], [YES #emoji.checkmark.box #pause],
     [#text(size: 3em, sym.arrow.r.double)],
-    [easy peasy lemon squeezy]
+    [easy peasy lemon squeezy?..]
     )
 ]
 
@@ -228,9 +226,9 @@
 ]
 
 #slideh[==== Example. `tgnet`][
-  + Replace Android code #pause
-  + #strike[Modify]Write CMake file #pause
-  + Develop server (MTProto) and emulate Java code & socket file #pause
+  + Replace Android code
+  + #strike[Modify]Write CMake file
+  + Develop server #footnote[https://github.com/saruman9/tg_srv] (MTProto #footnote[https://github.com/saruman9/010_editor_templates]) and emulate Java code & socket file
   + Develop a MitM PoC attack for triaging
 ]
 
@@ -251,7 +249,7 @@
 
 #slideh[== Summary][
   - Not so interesting for the presentation, but important as a base
-  - Bad BugBounty program
+  - Not good BugBounty program
   - Good for a first research in this field
   - Many other methods of analysis can be applied
 ]
@@ -262,8 +260,8 @@
 ]
 
 #slideh[== Sources][
-  - #link("https://xakep.ru/2023/05/16/analyzing-viber/")[Препарируем Viber. Мини-гид по анализу приложений для Android] \@ Xakep
-  - #link("https://github.com/saruman9/viber_linkparser_fuzzer/")[fuzzer + harness] \@ GitHub
+  - Препарируем Viber. Мини-гид по анализу приложений для Android #footnote[https://xakep.ru/2023/05/16/analyzing-viber/] #sym.copyright _Хакер_
+  - fuzzer + harness  #footnote[https://github.com/saruman9/viber_linkparser_fuzzer/]
 ]
 
 #slideh[== Static Analysis][
@@ -342,16 +340,15 @@
 #centered-slide[== Accessibility (real sink?)]
 
 #slideh[=== Static Analysis][
-  - #link("https://github.com/skylot/jadx")[jadx] --- decompilation
-  - IntelliJ IDEA --- deobfuscation, refactoring
-  - #link("https://www.scitools.com/")[SciTools Understand] --- code-flow, data-flow analysis
-  - `strings`, `grep`
+  - jadx #footnote[https://github.com/skylot/jadx] --- decompilation IntelliJ IDEA --- deobfuscation, refactoring
+  - SciTools Understand #footnote[https://www.scitools.com/] --- code-flow, data-flow analysis
+  - `strings`/`rizin`, `grep`/`ripgrep`
 ]
 
 #slideh[][
   #figure(
+    image("./images/understand.png", height: 80%),
     caption: [Call graph of SVG native function in Understand],
-    image("./images/understand.png", height: 80%)
   )
 ]
 
@@ -365,11 +362,11 @@
 #centered-slide[== Fuzzing]
 
 #slideh[=== Greybox is more interesting][
-  - #only(1)[libFuzzer] #only("2-")[#strike[libFuzzer]]
+  #only(1)[- libFuzzer / centipede / fuzztest] #only("2-")[- #strike[libFuzzer / centipede / fuzztest]]
   #only(3)[- honggfuzz] #only("4-")[- #strike[honggfuzz]]
   #only("5-")[- AFL++]
-  #only("6-")[- LibAFL
-  - etc.]
+  #only("6-")[- LibAFL]
+  #only("6-")[- etc.]
 ]
 
 #slideh[][
@@ -402,12 +399,16 @@
 #centered-slide[== Harness]
 
 #slideh[=== Reverse Engineering][
-  - Ghidra
-    - my #link("https://github.com/saruman9/ghidra")[Ghidra fork]
-    - my #link("https://github.com/saruman9/ghidra_scripts")[ghidra_scripts]
-    - #link("https://github.com/saruman9/recaster")[recaster plugin]
-    - #link("https://github.com/saruman9/ghidra_dev_pres")[Ghidra. Dev. Presentation]
-  - Binary Ninja --- my #link("https://github.com/saruman9/binja_snippets")[binja_snippets]
+  Ghidra
+
+  - Ghidra fork #footnote[https://github.com/saruman9/ghidra]
+  - `ghidra_scripts` #footnote[https://github.com/saruman9/ghidra_scripts]
+  - Recaster plugin #footnote[https://github.com/saruman9/recaster]
+  - "Ghidra. Dev" presentation #footnote[https://github.com/saruman9/ghidra_dev_pres]
+]
+
+#slideh[][
+  - Binary Ninja --- `binja_snippets` #footnote[https://github.com/saruman9/binja_snippets]
   - IDA Pro
   - rizin
 ]
@@ -419,82 +420,72 @@
   - `ApplyClassFunctionSignatureUpdatesScript.java`
   - `ApplyClassFunctionDefinitionUpdatesScript.java`
   - C++ directory in Script Manager
-  - #link("https://github.com/astrelsky/Ghidra-Cpp-Class-Analyzer")[Ghidra-Cpp-Class-Analyzer] by astrelsky
+  - Ghidra-Cpp-Class-Analyzer #footnote[https://github.com/astrelsky/Ghidra-Cpp-Class-Analyzer] by astrelsky
 ]
 
 #slideh[][
   IDA Pro
 
-  - #link("https://github.com/Metadorius/ida_medigate")[ida_medigate] by Metadorius --- fork of fork of fork ...
-  - #link("https://github.com/joeleong/ida-referee")[Referee] by joeleong --- a python port of James Koppel's Referee
+  - ida_medigate #footnote[https://github.com/Metadorius/ida_medigate] by Metadorius --- fork of fork of fork...
+  - Referee #footnote[https://github.com/joeleong/ida-referee] by joeleong --- a python port of James Koppel's Referee
 ]
 
 #slideh[][
   Binary Ninja
 
   - Use development release channel
-  - #link("https://github.com/CySHell/ClassyPP")[ClassyPP] by CySHell
-  - #link("https://github.com/whitequark/binja_itanium_cxx_abi")[binja_itanium_cxx_abi] by whitequark
-
+  - ClassyPP #footnote[https://github.com/CySHell/ClassyPP] by CySHell
+  - binja_itanium_cxx_abi #footnote[https://github.com/whitequark/binja_itanium_cxx_abi] by whitequark
 ]
 
 #slideh[][
   #figure(
-    caption: [BTW try Binary Ninja #footnote[A very old comparison of IDA and Binary Ninja --- #link("https://github.com/saruman9/binja_vs_ida")[Binary Ninja 1.1.1184-dev vs IDA Pro 7.0.171130 (RU)]]],
-    image("./images/bn.png", height: 70%)
+    image("./images/bn.png", height: 70%),
+    caption: [BTW try Binary Ninja #footnote[A very old comparison of IDA and Binary Ninja --- #link("https://github.com/saruman9/binja_vs_ida")[Binary Ninja 1.1.1184-dev vs IDA Pro 7.0.171130 (RU)]]
+    ],
   )
 ]
 
 #slideh[==== Signatures][
-  - Ghidra --- #link("https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Features/FunctionID/src/main/help/help/topics/FunctionID/FunctionID.html")[Function ID]
-  - IDA Pro --- #link("https://github.com/naim94a/lumen")[lumen] --- Lumina private server
-  - Binary Ninja --- #link("https://binary.ninja/2020/03/11/signature-libraries.html")[Signature Libraries]
+  - Ghidra: Function ID #footnote[#link("https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Features/FunctionID/src/main/help/help/topics/FunctionID/FunctionID.html")[FunctionID] help topic]
+  - IDA Pro: lumen #footnote[https://github.com/naim94a/lumen] --- Lumina private server
+  - Binary Ninja: Signature Libraries #footnote[https://binary.ninja/2020/03/11/signature-libraries.html]
 ]
 
 #slideh[==== Diffing][
-  - #link("https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Features/VersionTracking/src/main/help/help/topics/VersionTrackingPlugin/Version_Tracking_Intro.html")[Version Tracking] in Ghidra
-  - #link("https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Features/ProgramDiff/src/main/help/help/topics/Diff/Diff.htm")[Program Differences] in Ghidra
-  - #link("https://www.zynamics.com/bindiff.html")[BinDiff]
-  - #link("https://github.com/joxeankoret/diaphora")[Diaphora]
+  - Version Tracking #footnote[#link("https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Features/VersionTracking/src/main/help/help/topics/VersionTrackingPlugin/Version_Tracking_Intro.html")[Version Tracking] help topic] in Ghidra
+  - Program Differences #footnote[#link("https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/master/Ghidra/Features/ProgramDiff/src/main/help/help/topics/Diff/Diff.htm")[Program Differences] help topic] in Ghidra
+  - BinDiff #footnote[https://www.zynamics.com/bindiff.html]
+  - Diaphora #footnote[https://github.com/joxeankoret/diaphora]
 ]
 
-#slideh[==== Binary Formats][
-  - #link("https://core.telegram.org/mtproto")[MTProto]
-  - VoIP Telegram
-  - etc.
+#slideh[=== Difficulties & Resolving][
+  #only("1-2", [#emoji.quest])#only("3-", [#emoji.checkmark.box]) Java + C++
 
-  See #link("https://github.com/saruman9/010_editor_templates")[010 Editor Templates].
-]
+  #only(2, [#emoji.lightbulb Find "pure" functions])
 
-#slideh[=== Difficulties][
-  - Java + C++
-  - Threads
-  - Other shared libraries as dependencies
-  - Initialization in `JNI_OnLoad`
-]
+  #only("-4", [#emoji.quest])#only("5-", [#emoji.checkmark.box]) Threads
 
-#slideh[=== Resolving][
-  - Find "pure" functions
-  - Find a target function in a call graph without threads
-  - To do patching of shared libraries
-  - Load dependencies inside harness code
-  - Write stubs, call initialization functions
+  #only(4, [#emoji.lightbulb Find a target function in a call graph without threads])
+
+  #only("-6", [#emoji.quest])#only("7-", [#emoji.checkmark.box]) Other shared libraries as dependencies
+
+  #only(6, [#emoji.lightbulb To do patching of shared libraries])
+
+  #only(6, [#emoji.lightbulb Load dependencies inside harness code])
+
+  #only("-8", [#emoji.quest])#only("9-", [#emoji.checkmark.box]) Initialization in `JNI_OnLoad`
+
+  #only(8, [#emoji.lightbulb Write stubs, call initialization functions])
 ]
 
 #slideh[=== Example of a harness for the target function][
-  #set text(.4em)
+  #set text(.65em)
+  #set align(center)
   ```c
   const ptrdiff_t ADDR_JNI_ONLOAD = 0x0000000000011640;
   const ptrdiff_t ADDR_PARSE_LINK = 0x000000000002F870;
   const ptrdiff_t ADDR_COPY_JNI_STRING_FROM_STR = 0x0000000000011160;
-  [...]
-  typedef struct ParserResult
-  {
-      struct String user_agent_string;
-      struct String user_agent_info_string;
-      struct String accept_string;
-      struct String mime_type_string;
-  } ParserResult;
   [...]
   Functions *load_functions()
   {
@@ -508,29 +499,6 @@
 
       if (JNI_OnLoad != NULL && binder_init != NULL /* && binder_getInstance != NULL */)
       {
-        Dl_info jni_on_load_info;
-        dladdr(JNI_OnLoad, &jni_on_load_info);
-        size_t jni_on_load_addr = (size_t)jni_on_load_info.dli_saddr;
-
-        Dl_info binder_init_info;
-        dladdr(binder_init, &binder_init_info);
-        size_t binder_init_addr = (size_t)binder_init_info.dli_saddr;
-
-        int diff_parse_link = ADDR_PARSE_LINK - ADDR_JNI_ONLOAD;
-        int diff_copy_jni_string_from_str = ADDR_COPY_JNI_STRING_FROM_STR - ADDR_JNI_ONLOAD;
-        size_t parse_link_addr = jni_on_load_addr + diff_parse_link;
-        size_t copy_jni_string_from_str_addr = jni_on_load_addr + diff_copy_jni_string_from_str;
-        printf("[i] parse_link_addr: %zX\n", parse_link_addr);
-        printf("[i] copy_jni_string_from_str_addr: %zX\n", copy_jni_string_from_str_addr);
-        void (*parse_link)(ParserResult *, String *) = (void (*)(ParserResult *, String *))(parse_link_addr);
-        void (*copy_jni_string_from_str)(String *, const char *) = (void (*)(String *, const char *))(copy_jni_string_from_str_addr);
-        if (parse_link != NULL && copy_jni_string_from_str != NULL)
-        {
-          Functions *functions = (Functions *)malloc(sizeof(Functions));
-          functions->parse_link = parse_link;
-          functions->copy_jni_string_from_str = copy_jni_string_from_str;
-          return functions;
-        }
   [...]
   ```
 ]
@@ -538,11 +506,12 @@
 #slideh[== Catches][
   - DoS
   - Leaks
+  - Deadlocks
 ]
 
 #slideh[== Sources (once again)][
-  - #link("https://xakep.ru/2023/05/16/analyzing-viber/")[Препарируем Viber. Мини-гид по анализу приложений для Android] \@ Xakep
-  - #link("https://github.com/saruman9/viber_linkparser_fuzzer/")[fuzzer + harness] \@ GitHub
+  - Препарируем Viber. Мини-гид по анализу приложений для Android #footnote[https://xakep.ru/2023/05/16/analyzing-viber/] #sym.copyright _Хакер_
+  - fuzzer + harness  #footnote[https://github.com/saruman9/viber_linkparser_fuzzer/]
 ]
 
 #slideh[== Summary][
@@ -556,12 +525,6 @@
   #image(height: 50%, "./images/WhatsApp_logo-color-vertical.svg")
 ]
 
-#focus-slide[
-  == Disclaimer
-
-  The research is in progress
-]
-
 #slideh[== Static Analysis][
   - Manifest file --- #emoji.checkmark.box
   - Resources --- #emoji.checkmark.box, see the next slide
@@ -573,21 +536,40 @@
 #slideh[=== Superpack][
   Android app compression, which combines compiler analysis with data compression.
 
-  See #link("https://engineering.fb.com/2021/09/13/core-data/superpack/")[Superpack: Pushing the limits of compression in Facebook’s mobile apps] by Sapan Bhatia from Facebook.
+  See _Superpack: Pushing the limits of compression in Facebook’s mobile apps_ #footnote[https://engineering.fb.com/2021/09/13/core-data/superpack/] by Sapan Bhatia from Facebook.
 ]
 
-#slideh[==== Resolving][
-  + Reverse engineering and developing
-  + Reverse engineering and developing a wrapper (calling functions from a shared library in an emulator)
-  + Decompression in an emulator/Docker
+#slideh[][
+  Solutions:
+  - Reverse engineering and developing
+  - Reverse engineering and developing a wrapper (calling functions from a shared library in an emulator)
+  - #only(2)[#set text(0.7em); #emoji.checkmark.box] Decompression in an emulator/Docker
+]
+
+#slideh[== Attack Vectors & Components][
+  - Java part
+  - Many open-source components
+  - `libwhatsapp.so`
+    - Statically linked
+    - More and more Rust
+]
+
+#slideh[][
+  After a long CFG/DFG analysis...
+
+  - MP4 checking (incoming messages), converting (outgoing messages)
+  - GIF checking
+  - WEBP parsing (stickers)
+  - `libmagi` (MIME type identification)
+  - VoIP (PJSIP project #footnote[https://github.com/pjsip/pjproject])
 ]
 
 #centered-slide[== Fuzzing]
 
 #slideh[=== AFL++ + Frida][
-  - Not as hard to build for Android as I expected #footnote[#link("https://github.com/saruman9/AFLplusplus/tree/android")[Repository] for building AFL++ under Android]
+  - Not as hard to build for Android as I expected #footnote[https://github.com/saruman9/AFLplusplus/tree/android]
   - Perfect for those who prefer C++
-  - Not as flexible (_sic!_) as LibAFL, but rich in functionality
+  - Not as flexible as LibAFL, but rich in functionality
 ]
 
 #centered-slide[=== LibAFL + Frida]
@@ -604,21 +586,22 @@
 ]
 
 #slideh[][
-  + Moving Android toolchains from libgcc to libclang_rt (#link("https://github.com/android/ndk/wiki/Changelog-r23#changes")[Issue 1231])
-  + Updating the Android NDK in Rust 1.68 (#link("https://blog.rust-lang.org/2023/01/09/android-ndk-update-r25.html")[Changelog])
-  + Fixing build error for NDK 23 and above (#link("https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946")[workaround])
-  + #link("https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1693328137")[Patches] for Frida (only for NDK below 23)
-  + #link("https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1695346506")[Workaround] for aarch64 `__clear_cache` issue
+  + Moving Android toolchains from libgcc to libclang_rt #footnote[https://github.com/android/ndk/wiki/Changelog-r23#changes]
+  + Updating the Android NDK in Rust 1.68 #footnote[https://blog.rust-lang.org/2023/01/09/android-ndk-update-r25.html]
+  + Fixing build error for NDK 23 and above #footnote[https://github.com/rust-lang/rust/pull/85806#issuecomment-1096266946]
+  + Patches for Frida (only for NDK below 23) #footnote[https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1693328137]
+  + Workaround for aarch64 `__clear_cache` issue #footnote[https://github.com/AFLplusplus/LibAFL/issues/1359#issuecomment-1695346506]
+  + A dirty hack for `frida-rust` #footnote[https://github.com/frida/frida-rust/pull/112]
 ]
 
 #slideh[==== LibAFL problems][
-  - DrCov coverage doesn't work as expected
-  - Asan doesn't work for Android x86_64
-  - miniBSOD doesn't work for Android x86_64
+  - DrCov coverage doesn't work as expected #footnote[https://github.com/AFLplusplus/LibAFL/pull/1579]#super[,] #footnote[https://github.com/AFLplusplus/LibAFL/pull/1581]
+  - Asan doesn't work for Android x86_64 #footnote[https://github.com/AFLplusplus/LibAFL/pull/1578]
+  - miniBSOD doesn't work for Android x86_64 #footnote[https://github.com/AFLplusplus/LibAFL/pull/1577]
 ]
 
 #slideh[][
-  - Additional changes#footnote[#link("https://github.com/saruman9/LibAFL/branches/yours")[Branches of patches/changes] in my repository]:
+  - Additional changes#footnote[https://github.com/saruman9/LibAFL/branches/all]:
     - Option to continue fuzzing
     - Catching of timeout objectives
     - Option to disable coverage
@@ -627,8 +610,8 @@
 
 #slideh[=== Frida][
   - I had a lot of problems because I didn't understand how Stalker works. Especially when analyzing complex objects (JIT is terrible)
-  - Be sure to read #link("https://frida.re/docs/stalker/")[the documentation] for Stalker (and Gum interface) before using it #pause
-  - LibAFL + Frida = Multithreading doesn't work #pause
+  - Be sure to read the documentation #footnote[https://frida.re/docs/stalker/] for Stalker (and Gum interface) before using it #pause
+  - LibAFL + Frida = Multithreading doesn't work
   - The sanitizer based on Frida doesn't work correctly on some arch/platforms
 ]
 
@@ -644,10 +627,12 @@
   Create Java VM from C/C++/Rust code of a harness/fuzzer!
 ]
 
-#slideh[==== Sources][
-  - #link("https://calebfenton.github.io/2017/04/05/creating_java_vm_from_android_native_code/")[Creating a Java VM from Android Native Code] by Caleb Fenton
-  - #link("https://calebfenton.github.io/2017/04/14/calling_jni_functions_with_java_object_arguments_from_the_command_line/")[Calling JNI Functions with Java Object Arguments from the Command Line] by Caleb Fenton
-  - #link("https://gershnik.github.io/2021/03/26/load-art-from-native.html")[Loading Android ART virtual machine from native executables] by Eugene Gershnik
+#slideh[][
+  Sources:
+
+  - Creating a Java VM from Android Native Code #footnote[https://calebfenton.github.io/2017/04/05/creating_java_vm_from_android_native_code/] by Caleb Fenton
+  - Calling JNI Functions with Java Object Arguments from the Command Line #footnote[https://calebfenton.github.io/2017/04/14/calling_jni_functions_with_java_object_arguments_from_the_command_line/] by Caleb Fenton
+  - Loading Android ART virtual machine from native executables #footnote[https://gershnik.github.io/2021/03/26/load-art-from-native.html] by Eugene Gershnik
 ]
 
 #slideh[==== Where hell begins?][
@@ -669,9 +654,9 @@
     _I have used 3 real devices and countless versions of an emulator_
   ]
 
-  #only(5)[#text(size: 2em)[It still doesn't work stable...]
+  #only(5)[#text(size: 2em)[It still doesn't work stably...]
 
-    #align(right)[#text(size: .5em, fill: gray)[Someday I'll publish it as open source]]
+    #text(size: 1.5em)[But it works! #footnote[https://github.com/saruman9/jnienv]#super[,]#footnote[BTW Valgrind for Android: https://github.com/saruman9/valgrind]]
   ]
 ]
 
@@ -682,21 +667,43 @@
     Does anyone know a tool that is comfortable to use for Smali patching?
   ]
   #only(2)[
-    - #link("https://blog.quarkslab.com/smali-the-parseltongue-language.html")[Smali the Parseltongue Language] by Benoît Forgette from Quarkslab
+    - Smali the Parseltongue Language #footnote[https://blog.quarkslab.com/smali-the-parseltongue-language.html] by Benoît Forgette from Quarkslab
     - Ghidra
     - Binary Ninja
-    - #link("https://github.com/LoyieKing/Smalise")[Smalise extension for VSCode] by LoyieKing
+    - Smalise extension for VSCode #footnote[https://github.com/LoyieKing/Smalise] by LoyieKing
   ]
 ]
 
-#slideh[== Catches][
-  #align(center + top)[#text(3em)[...]]
+#centered-slide[== Catches]
+
+#slideh[=== DoS. Sender side][
+  - Gallery
+    - TIFF, SVG
+    - OGG, WAV, MP3 
+  - Live
+    - Opus (audio recorder)
+    - Video stream from a camera
+  - Sending
+    - MP4
 ]
 
-#slideh[= Summary][
-  - The journey is 6 months long #pause
-  - From zero to #strike([hero]) some bugs #pause
-  - This is the beginning for now, next time --- exploitation
+#slideh[=== DoS. Receiver side][
+  - Media hijacking
+  - Android Java exceptions, native iOS crashes
 ]
 
-#focus-slide[= Thank you!]
+#slideh[== Summary][
+  - Only DoS... yet
+  - VoIP is still waiting for me
+]
+
+#slideh[= General summary][
+  - The journey is 1 year long #pause
+  - From zero to #strike([hero]) some bugs with only fuzzing #pause
+  - This is the vulnerability research for now, next time --- exploitation development
+]
+
+#[
+  #set heading(outlined: false)
+  #focus-slide[= Thank you!]
+]
